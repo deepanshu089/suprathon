@@ -1,0 +1,52 @@
+[
+  {
+    "id": "1",
+    "name": "John Smith",
+    "email": "john.smith@example.com",
+    "phone": "(123) 456-7890",
+    "status": "new",
+    "score": 85,
+    "created_at": "2023-09-15T10:30:00Z",
+    "updated_at": "2023-09-15T10:30:00Z"
+  },
+  {
+    "id": "2",
+    "name": "Emily Johnson",
+    "email": "emily.johnson@example.com",
+    "phone": "(234) 567-8901",
+    "status": "screening",
+    "score": 72,
+    "created_at": "2023-09-14T08:45:00Z",
+    "updated_at": "2023-09-16T14:20:00Z"
+  },
+  {
+    "id": "3",
+    "name": "Michael Brown",
+    "email": "michael.brown@example.com",
+    "phone": "(345) 678-9012",
+    "status": "shortlisted",
+    "score": 91,
+    "created_at": "2023-09-10T15:20:00Z",
+    "updated_at": "2023-09-13T11:10:00Z"
+  },
+  {
+    "id": "4",
+    "name": "Sarah Davis",
+    "email": "sarah.davis@example.com",
+    "phone": "(456) 789-0123",
+    "status": "rejected",
+    "score": 45,
+    "created_at": "2023-09-05T09:15:00Z",
+    "updated_at": "2023-09-07T16:30:00Z"
+  },
+  {
+    "id": "5",
+    "name": "Robert Wilson",
+    "email": "robert.wilson@example.com",
+    "phone": "(567) 890-1234",
+    "status": "new",
+    "score": 68,
+    "created_at": "2023-09-16T13:40:00Z",
+    "updated_at": "2023-09-16T13:40:00Z"
+  }
+]
