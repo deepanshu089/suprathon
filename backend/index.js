@@ -9,8 +9,24 @@ const { errorHandler } = require("./middleware/errorHandler");
 
 const app = express();
 
-// Allow requests from the React frontend
-app.use(cors({ origin: process.env.FRONTEND_URL || "http://localhost:5173" }));
+// Allow requests from the React frontend.
+// FRONTEND_URL can be a comma-separated list for multiple origins
+// (e.g. main Vercel domain + preview URLs + localhost).
+const allowedOrigins = (process.env.FRONTEND_URL || "http://localhost:5173")
+  .split(",")
+  .map((o) => o.trim());
+
+app.use(
+  cors({
+    origin: (requestOrigin, callback) => {
+      // Allow requests with no origin (mobile apps, curl, Postman)
+      if (!requestOrigin) return callback(null, true);
+      if (allowedOrigins.includes(requestOrigin)) return callback(null, true);
+      callback(new Error(`CORS: origin ${requestOrigin} not allowed`));
+    },
+    credentials: true,
+  })
+);
 
 // Parse JSON request bodies
 app.use(express.json());
