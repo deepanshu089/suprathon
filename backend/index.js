@@ -10,18 +10,24 @@ const { errorHandler } = require("./middleware/errorHandler");
 const app = express();
 
 // Allow requests from the React frontend.
-// FRONTEND_URL can be a comma-separated list for multiple origins
-// (e.g. main Vercel domain + preview URLs + localhost).
-const allowedOrigins = (process.env.FRONTEND_URL || "http://localhost:5173")
+// Accepts: localhost dev, any Vercel deployment (*.vercel.app),
+// and anything listed in FRONTEND_URL (comma-separated).
+const explicitOrigins = (process.env.FRONTEND_URL || "")
   .split(",")
-  .map((o) => o.trim());
+  .map((o) => o.trim())
+  .filter(Boolean);
 
 app.use(
   cors({
     origin: (requestOrigin, callback) => {
-      // Allow requests with no origin (mobile apps, curl, Postman)
+      // Allow requests with no origin (curl, Postman, mobile apps)
       if (!requestOrigin) return callback(null, true);
-      if (allowedOrigins.includes(requestOrigin)) return callback(null, true);
+      // Allow localhost for local development
+      if (requestOrigin.startsWith("http://localhost")) return callback(null, true);
+      // Allow any Vercel deployment URL (main + preview branches)
+      if (requestOrigin.endsWith(".vercel.app")) return callback(null, true);
+      // Allow anything explicitly listed in FRONTEND_URL
+      if (explicitOrigins.includes(requestOrigin)) return callback(null, true);
       callback(new Error(`CORS: origin ${requestOrigin} not allowed`));
     },
     credentials: true,
