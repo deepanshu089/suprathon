@@ -1,9 +1,9 @@
 // Resume Agent
-// Responsibility: Parse raw resume text and extract structured information using Gemini.
+// Responsibility: Parse raw resume text and extract structured information using the LLM.
 // This is a dedicated AI agent — it has one job and does it well.
 // Separation of concerns: AI logic lives here, not in the controller.
 
-const { geminiModel } = require("../lib/gemini");
+const { llmModel } = require("../lib/aiClient");
 const { parseAiJson } = require("../utils/parseAiJson");
 
 // Converts raw resume text into structured fields (name, skills, experience, etc.)
@@ -25,7 +25,7 @@ Resume text:
 ${rawText}
 `;
 
-  const result = await geminiModel.generateContent(prompt);
+  const result = await llmModel.generateContent(prompt);
   return parseAiJson(result.response.text());
 }
 
@@ -41,7 +41,7 @@ Resume:
 ${rawText}
 `;
 
-  const result = await geminiModel.generateContent(prompt);
+  const result = await llmModel.generateContent(prompt);
   return parseAiJson(result.response.text());
 }
 

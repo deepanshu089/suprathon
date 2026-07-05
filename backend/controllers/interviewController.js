@@ -9,7 +9,7 @@
 const supabase = require("../utils/supabase");
 const { generateQuestions } = require("../services/interviewAgent");
 const { evaluateInterview } = require("../services/evaluationAgent");
-const { transcribeAudio } = require("../lib/gemini");
+const { transcribeAudio } = require("../lib/aiClient");
 
 // Candidate: upload the recorded answer audio for one question, get back the transcribed text.
 // Server-side transcription (Groq Whisper) instead of the browser's Web Speech API —

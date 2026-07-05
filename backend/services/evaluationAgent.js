@@ -3,7 +3,7 @@
 // Scores are ALWAYS accompanied by explanation — never a bare number.
 // This is the final step of the interview pipeline.
 
-const { geminiModel } = require("../lib/gemini");
+const { llmModel } = require("../lib/aiClient");
 const { parseAiJson } = require("../utils/parseAiJson");
 
 // Scores a completed interview from its full list of Q&A transcripts.
@@ -52,7 +52,7 @@ Return ONLY valid JSON:
 }
 `;
 
-  const result = await geminiModel.generateContent(prompt);
+  const result = await llmModel.generateContent(prompt);
   return parseAiJson(result.response.text());
 }
 

@@ -7,17 +7,19 @@ An AI-powered recruitment platform: candidates upload resumes and apply to jobs,
 ```
 React (Vite) frontend  ──HTTP (Axios + JWT)──►  Express.js backend
                                                        │
-                                  ┌────────────────────┼────────────────────┐
-                                  ▼                                         ▼
-                          Supabase (Postgres + pgvector)              Groq API
-                          profiles / resumes / jobs /                 - LLM (Llama 3.3 70B) for all
-                          applications / interviews                    AI agents below
-                                                                       - Whisper for speech-to-text
+                          ┌────────────────────┬──────┴──────┬────────────────────┐
+                          ▼                    ▼             ▼
+                  Supabase (Postgres      Groq API      HuggingFace
+                  + pgvector)             - LLM (Llama   Inference API
+                  profiles / resumes /      3.3 70B) for - sentence-transformers/
+                  jobs / applications /     all AI agents  all-mpnet-base-v2 for
+                  interviews              - Whisper for    resume/job embeddings
+                                             speech-to-text  (768-dim)
 ```
 
 **Backend layers** (`backend/`):
 - `routes/` → `controllers/` → `services/` (AI agents) / `utils/` (DB, embeddings)
-- `lib/gemini.js` is the single AI client wrapper — every service calls through it, so swapping LLM providers never touches agent code.
+- `lib/aiClient.js` is the single AI client wrapper — every service calls through it, so swapping LLM/embedding providers never touches agent code.
 - `middleware/` — JWT auth, role-based access control, centralized error handling.
 
 **AI agents** (`backend/services/`), each with one job:
@@ -32,7 +34,7 @@ React (Vite) frontend  ──HTTP (Axios + JWT)──►  Express.js backend
 
 **RAG (Retrieval-Augmented Generation):** before generating interview questions, the backend retrieves the candidate's actual parsed resume and the job's actual requirements from the database and injects them into the prompt — so questions reference real experience instead of being generic.
 
-**Vector search:** resumes and jobs are embedded and stored in `pgvector` columns. Matching uses cosine similarity (via a Postgres RPC function) to get a raw fit score, which the Matching Agent then explains in plain English — a candidate never just sees a bare percentage.
+**Vector search:** resumes and jobs are embedded (via HuggingFace's free Inference API running `sentence-transformers/all-mpnet-base-v2`, 768 dimensions) and stored in `pgvector` columns. Matching uses cosine similarity (via a Postgres RPC function) to get a raw fit score, which the Matching Agent then explains in plain English — a candidate never just sees a bare percentage.
 
 ## Candidate Pipeline
 
@@ -70,15 +72,18 @@ pending → shortlisted → interviewed → approved
 ### 2. Groq API key
 - Get a free key at console.groq.com — used for both the LLM and Whisper transcription, no separate key needed.
 
-### 3. Backend
+### 3. HuggingFace API key
+- Get a free token at huggingface.co/settings/tokens — when creating it, make sure **"Make calls to Inference Providers"** is checked, or embedding requests will fail with a 403. Used only for resume/job embeddings (`sentence-transformers/all-mpnet-base-v2`).
+
+### 4. Backend
 ```bash
 cd backend
-# create a .env with PORT, JWT_SECRET, SUPABASE_URL, SUPABASE_SERVICE_KEY, GROQ_API_KEY, FRONTEND_URL
+# create a .env with PORT, JWT_SECRET, SUPABASE_URL, SUPABASE_SERVICE_KEY, GROQ_API_KEY, HUGGINGFACE_API_KEY, FRONTEND_URL
 npm install
 npm run dev
 ```
 
-### 4. Frontend
+### 5. Frontend
 ```bash
 cd frontend
 # create a .env with VITE_API_URL=http://localhost:5000/api

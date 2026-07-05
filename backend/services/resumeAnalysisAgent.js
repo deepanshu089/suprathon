@@ -3,7 +3,7 @@
 // against a specific job. Goes much deeper than the matching agent —
 // explains WHY the candidate is or isn't a fit with specific evidence.
 
-const { geminiModel } = require("../lib/gemini");
+const { llmModel } = require("../lib/aiClient");
 const { parseAiJson } = require("../utils/parseAiJson");
 
 // Builds an in-depth, recruiter-facing breakdown of one candidate's fit for
@@ -47,7 +47,7 @@ Provide a thorough analysis in the following JSON format:
 Return ONLY valid JSON. No markdown.
 `;
 
-  const result = await geminiModel.generateContent(prompt);
+  const result = await llmModel.generateContent(prompt);
   return parseAiJson(result.response.text());
 }
 
@@ -81,7 +81,7 @@ Recruiter: ${userMessage}
 
 AI:`;
 
-  const result = await geminiModel.generateContent(prompt);
+  const result = await llmModel.generateContent(prompt);
   return result.response.text().trim();
 }
 

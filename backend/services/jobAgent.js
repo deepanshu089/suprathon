@@ -2,7 +2,7 @@
 // Responsibility: Analyze a job description and extract structured requirements.
 // This lets us compare "what the job needs" vs "what the candidate has" clearly.
 
-const { geminiModel } = require("../lib/gemini");
+const { llmModel } = require("../lib/aiClient");
 const { parseAiJson } = require("../utils/parseAiJson");
 
 // Sends the job title + description to the LLM and gets back structured
@@ -22,7 +22,7 @@ Job Title: ${title}
 Job Description: ${description}
 `;
 
-  const result = await geminiModel.generateContent(prompt);
+  const result = await llmModel.generateContent(prompt);
   return parseAiJson(result.response.text());
 }
 

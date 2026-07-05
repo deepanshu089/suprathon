@@ -32,24 +32,69 @@ export default function Login() {
     }
   }
 
+  const labelStyle = {
+    display: "block",
+    fontSize: "12px",
+    fontWeight: "bold",
+    textTransform: "uppercase",
+    letterSpacing: "0.04em",
+    color: "#555",
+    marginBottom: "6px",
+  };
+
   return (
-    <div style={{ maxWidth: "400px", margin: "80px auto", padding: "24px", border: "1px solid #000" }}>
-      <h2 style={{ marginBottom: "24px" }}>Login — HireEZ AI</h2>
-      {error && <p style={{ color: "red", marginBottom: "12px" }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: "16px" }}>
-          <label>Username</label>
-          <input value={username} onChange={(e) => setUsername(e.target.value)} required />
+    <div style={{
+      minHeight: "100vh",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      background: "#f5f5f5",
+      padding: "24px",
+    }}>
+      <div style={{ width: "100%", maxWidth: "400px" }}>
+        {/* Brand mark */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", marginBottom: "28px" }}>
+          <div style={{
+            width: "34px", height: "34px",
+            background: "#2563eb",
+            color: "#fff",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontWeight: "bold", fontSize: "17px",
+          }}>
+            H
+          </div>
+          <span style={{ fontWeight: "bold", fontSize: "20px", letterSpacing: "0.3px" }}>HireEZ AI</span>
         </div>
-        <div style={{ marginBottom: "16px" }}>
-          <label>Password</label>
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+
+        <div style={{ background: "#fff", border: "1px solid #000", padding: "32px" }}>
+          <h2 style={{ margin: "0 0 6px", fontSize: "22px" }}>Welcome back</h2>
+          <p style={{ margin: "0 0 24px", color: "#555", fontSize: "14px" }}>Log in to continue to your dashboard.</p>
+
+          {error && (
+            <div style={{ border: "1px solid #dc2626", background: "#fef2f2", color: "#dc2626", padding: "10px 12px", marginBottom: "18px", fontSize: "13px" }}>
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit}>
+            <div style={{ marginBottom: "18px" }}>
+              <label style={labelStyle}>Username</label>
+              <input value={username} onChange={(e) => setUsername(e.target.value)} required autoFocus />
+            </div>
+            <div style={{ marginBottom: "24px" }}>
+              <label style={labelStyle}>Password</label>
+              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            </div>
+            <button className="btn-primary" type="submit" style={{ width: "100%", padding: "10px 16px", fontSize: "15px" }} disabled={loading}>
+              {loading ? "Logging in..." : "Login"}
+            </button>
+          </form>
         </div>
-        <button className="btn-primary" type="submit" style={{ width: "100%" }} disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
-        </button>
-      </form>
-      <p style={{ marginTop: "16px" }}>Don't have an account? <Link to="/signup">Sign up</Link></p>
+
+        <p style={{ textAlign: "center", marginTop: "20px", fontSize: "14px", color: "#555" }}>
+          Don't have an account? <Link to="/signup" style={{ color: "#2563eb", fontWeight: "bold" }}>Sign up</Link>
+        </p>
+      </div>
     </div>
   );
 }

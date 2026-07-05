@@ -2,7 +2,7 @@
 // Responsibility: Generate personalized interview questions using RAG.
 // RAG = Retrieval Augmented Generation.
 //
-// Instead of asking Gemini generic questions, we first RETRIEVE:
+// Instead of asking the LLM generic questions, we first RETRIEVE:
 //   1. The candidate's parsed resume (from DB)
 //   2. The job description data (from DB)
 // Then we INJECT this context into the prompt before generating questions.
@@ -11,7 +11,7 @@
 // Question distribution:
 //   2 resume-based, 2 job-based, 1 technical, 1 behavioral = 6 total
 
-const { geminiModel } = require("../lib/gemini");
+const { llmModel } = require("../lib/aiClient");
 const { parseAiJson } = require("../utils/parseAiJson");
 
 // Default round structure used when a recruiter hasn't configured custom rounds —
@@ -62,7 +62,7 @@ Return ONLY a JSON array:
 ]
 `;
 
-  const result = await geminiModel.generateContent(prompt);
+  const result = await llmModel.generateContent(prompt);
   return parseAiJson(result.response.text());
 }
 

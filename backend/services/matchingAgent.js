@@ -4,7 +4,7 @@
 // This agent's job is to make that number EXPLAINABLE — required for interviews.
 // A recruiter should never see just "85%" — they need to know WHY.
 
-const { geminiModel } = require("../lib/gemini");
+const { llmModel } = require("../lib/aiClient");
 const { parseAiJson } = require("../utils/parseAiJson");
 
 // Turns a raw cosine-similarity score (0-1) plus skill lists into a
@@ -30,7 +30,7 @@ Return ONLY valid JSON with this structure:
 }
 `;
 
-  const result = await geminiModel.generateContent(prompt);
+  const result = await llmModel.generateContent(prompt);
   return parseAiJson(result.response.text());
 }
 
